@@ -1,18 +1,23 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
 
 public class Kalkulator extends JFrame {
+    private JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
+    private JButton btnTambah, btnKurang, btnKali, btnBagi, btnPangkat;
+    private JButton btnHasil, btnHapus;
+    private double hasil, hasilTemp;
+    private JTextField fieldHasil;
+
     Boolean cekTambah = false ;
     Boolean cekKurang = false ;
     Boolean cekBagi = false ;
     Boolean cekKali = false ;
+    Boolean cekPangkat = false;
+
+
     String display = "";
-    private JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
-    private JButton btnTambah, btnKurang, btnKali, btnBagi;
-    private JButton btnHasil, btnHapus;
-    private double hasil, hasilTemp;
-    private JTextField fieldHasil;
 
     public Kalkulator() {
 
@@ -46,7 +51,7 @@ public class Kalkulator extends JFrame {
             btnHasil.addActionListener(new ListenToSolve());
 
         JPanel p2 = new JPanel();
-        p2.setLayout(new GridLayout(5, 1));
+        p2.setLayout(new GridLayout(6, 1));
         p2.add(fieldHasil = new JTextField());
             fieldHasil.setEditable(false);
         p2.add(btnTambah = new JButton("+"));
@@ -57,6 +62,8 @@ public class Kalkulator extends JFrame {
             btnKali.addActionListener(new ListenToMultiply());
         p2.add(btnBagi = new JButton("/"));
             btnBagi.addActionListener(new ListenToDivide());
+        p2.add(btnPangkat = new JButton("x^n"));
+            btnPangkat.addActionListener(new ListenToPow());
 
         JPanel p = new JPanel();
         p.setLayout(new GridLayout());
@@ -65,17 +72,8 @@ public class Kalkulator extends JFrame {
         add(p);
     }
 
-    public static void main(String[] args) {
-        Kalkulator calc = new Kalkulator();
-        calc.pack(); //Agar ukuran frame menyesuaikan
-        calc.setLocationRelativeTo(null);
-        calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        calc.setVisible(true);
-    }
-
     class ListenToClear implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //display = fieldHasil.getText();
             fieldHasil.setText("");
             cekTambah = cekKurang = cekKali = cekBagi  = false ;
             hasil = 0;
@@ -89,63 +87,54 @@ public class Kalkulator extends JFrame {
             fieldHasil.setText(display + "1");
         }
     }
-
     class ListenToTwo implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "2");
         }
     }
-
     class ListenToThree implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "3");
         }
     }
-
     class ListenToFour implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "4");
         }
     }
-
     class ListenToFive implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "5");
         }
     }
-
     class ListenToSix implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "6");
         }
     }
-
     class ListenToSeven implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "7");
         }
     }
-
     class ListenToEight implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "8");
         }
     }
-
     class ListenToNine implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
             fieldHasil.setText(display + "9");
         }
     }
-
     class ListenToZero implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             display = fieldHasil.getText();
@@ -161,7 +150,6 @@ public class Kalkulator extends JFrame {
 
         }
     }
-
     class ListenToSubtract implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             hasil = Double.parseDouble(fieldHasil.getText());
@@ -169,7 +157,6 @@ public class Kalkulator extends JFrame {
             cekKurang =true;
         }
     }
-
     class ListenToMultiply implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             hasil = Double.parseDouble(fieldHasil.getText());
@@ -178,12 +165,18 @@ public class Kalkulator extends JFrame {
 
         }
     }
-
     class ListenToDivide implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             hasil = Double.parseDouble(fieldHasil.getText());
             fieldHasil.setText("");
             cekBagi =true;
+        }
+    }
+    class ListenToPow implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            hasil = Double.parseDouble(fieldHasil.getText());
+            fieldHasil.setText("");
+            cekPangkat =true;
         }
     }
 
@@ -198,10 +191,20 @@ public class Kalkulator extends JFrame {
                 hasilTemp = hasil / hasilTemp;
             else if ( cekKali == true  )
                 hasilTemp = hasil * hasilTemp;
-            fieldHasil.setText(  Double.toString( hasilTemp ) );
+            else if ( cekPangkat == true  )
+                hasilTemp = Math.pow(hasil, hasilTemp);
+            fieldHasil.setText( Double.toString( hasilTemp ) );
 
-            cekTambah = cekKurang = cekKali = cekBagi  = false ;
+            cekTambah = cekKurang = cekKali = cekBagi = cekPangkat = false ;
         }
+    }
+
+    public static void main(String[] args) {
+        Kalkulator calc = new Kalkulator();
+        calc.pack(); //Agar ukuran frame menyesuaikan
+        calc.setLocationRelativeTo(null);
+        calc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        calc.setVisible(true);
     }
 
 }
